@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أبو العلا ستور | Abu Al-Ela Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0a1a3f; --blue2:#122a5e; --yellow:#ffc107; --yellow2:#ffde59;
+  --white:#fff; --danger:#e53935; --ok:#22c55e;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:linear-gradient(160deg,#0a1a3f,#122a5e 60%,#0a1a3f);color:#fff;min-height:100vh}
+header{position:sticky;top:0;z-index:50;background:rgba(10,26,63,.92);backdrop-filter:blur(10px);border-bottom:2px solid var(--yellow)}
+.header-in{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.4rem;color:var(--yellow)}
+.logo-badge{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--yellow),#ff9800);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 0 15px rgba(255,193,7,.5)}
+.hdr-btns{display:flex;gap:8px}
+.btn{cursor:pointer;border:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:.95rem;transition:.2s}
+.btn-y{background:linear-gradient(135deg,var(--yellow),#ff9800);color:#0a1a3f}
+.btn-y:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,193,7,.4)}
+.btn-o{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn-o:hover{background:rgba(255,255,255,.2)}
+.btn-d{background:var(--danger);color:#fff}
+.cart-count{background:var(--danger);color:#fff;border-radius:50%;padding:2px 8px;font-size:.8rem;margin-right:4px}
+.hero{max-width:1200px;margin:20px auto;padding:0 16px}
+.hero img{width:100%;border-radius:20px;border:2px solid var(--yellow);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.cats{max-width:1200px;margin:20px auto;padding:0 16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.cat-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:30px;padding:8px 20px;cursor:pointer;font-weight:700;transition:.2s}
+.cat-btn.active,.cat-btn:hover{background:var(--yellow);color:#0a1a3f;border-color:var(--yellow)}
+.grid{max-width:1200px;margin:20px auto 60px;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;transition:.25s;position:relative}
+.card:hover{transform:translateY(-6px);border-color:var(--yellow);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.card .img{height:170px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;background:radial-gradient(circle at 50% 40%,rgba(255,193,7,.18),transparent 70%)}
+.card .img img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:14px}
+.card-body h3{font-size:1.05rem;margin-bottom:6px}
+.price{color:var(--yellow);font-weight:900;font-size:1.25rem;margin-bottom:10px}
+.price small{font-size:.8rem;font-weight:400}
+.add-btn{width:100%;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#0a1a3f;border:none;border-radius:10px;padding:10px;font-weight:900;font-size:1rem;cursor:pointer;transition:.2s}
+.add-btn:hover{filter:brightness(1.1)}
+.badge{position:absolute;top:10px;right:10px;background:var(--danger);padding:3px 12px;border-radius:20px;font-size:.75rem;font-weight:700}
+/* cart drawer */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90;display:none}
+.overlay.show{display:block}
+.drawer{position:fixed;top:0;left:0;height:100%;width:min(420px,95vw);background:#0e2150;z-index:100;transform:translateX(-100%);transition:.3s;display:flex;flex-direction:column;border-right:2px solid var(--yellow)}
+.drawer.open{transform:translateX(0)}
+.drawer-h{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.15)}
+.drawer-items{flex:1;overflow-y:auto;padding:14px}
+.cart-item{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.07);border-radius:12px;padding:10px;margin-bottom:10px}
+.cart-item .ci-img{font-size:2rem;width:50px;text-align:center}
+.cart-item .ci-info{flex:1}
+.qty-btns{display:flex;gap:6px;align-items:center}
+.qty-btns button{width:28px;height:28px;border-radius:8px;border:none;background:var(--yellow);color:#0a1a3f;font-weight:900;cursor:pointer}
+.drawer-f{padding:16px;border-top:1px solid rgba(255,255,255,.15)}
+.total-row{display:flex;justify-content:space-between;font-weight:900;font-size:1.2rem;margin-bottom:12px;color:var(--yellow)}
+/* forms */
+.field{margin-bottom:12px}
+.field label{display:block;margin-bottom:5px;font-size:.9rem;font-weight:700;color:var(--yellow2)}
+.field input,.field select,.field textarea{width:100%;padding:11px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:.95rem}
+.field select option{color:#000}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--yellow)}
+/* modal */
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal-box{background:#0e2150;border:2px solid var(--yellow);border-radius:20px;width:min(520px,100%);max-height:90vh;overflow-y:auto;padding:24px}
+.modal-box h2{color:var(--yellow);margin-bottom:16px;font-size:1.3rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.admin-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.07);padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:8px}
+.admin-item .ai-name{flex:1;font-size:.95rem}
+.small-btn{padding:6px 12px;font-size:.8rem;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+footer{text-align:center;padding:24px;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1)}
+.toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ok);color:#fff;padding:12px 26px;border-radius:30px;font-weight:700;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.empty{text-align:center;padding:40px;color:rgba(255,255,255,.5);grid-column:1/-1}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}.logo{font-size:1.1rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <div class="logo"><div class="logo-badge">📱</div><div>أبو العلا ستور<br><small style="font-size:.65rem;color:#fff;font-weight:400">Abu Al-Ela Store</small></div></div>
+    <div class="hdr-btns">
+      <button class="btn btn-o" onclick="openAdmin()">⚙️ لوحة التحكم</button>
+      <button class="btn btn-y" onclick="openCart()">🛒 السلة <span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="hero"><img src="store-banner.png" alt="أبو العلا ستور"></div>
+
+<div class="cats" id="cats"></div>
+<div class="grid" id="grid"></div>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-h"><h2 style="color:var(--yellow)">🛒 سلة المشتريات</h2><button class="btn btn-o" onclick="closeAll()">✖</button></div>
+  <div class="drawer-items" id="cartItems"></div>
+  <div class="drawer-f">
+    <div class="total-row"><span>الإجمالي:</span><span id="cartTotal">0 ج.م</span></div>
+    <button class="btn btn-y" style="width:100%" onclick="openCheckout()">✅ إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- Checkout modal -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-box">
+    <h2>📝 بيانات التوصيل</h2>
+    <div class="field"><label>الاسم بالكامل *</label><input id="cName" placeholder="اكتب اسمك"></div>
+    <div class="two-col">
+      <div class="field"><label>رقم الموبايل *</label><input id="cPhone" placeholder="01xxxxxxxxx" maxlength="11" inputmode="numeric"></div>
+      <div class="field"><label>المحافظة *</label><select id="cGov"><option value="">اختر المحافظة</option></select></div>
+    </div>
+    <div class="field"><label>العنوان بالتفصيل *</label><textarea id="cAddr" rows="2" placeholder="المدينة - الحي - الشارع - رقم العمارة - الدور - شقة"></textarea></div>
+    <div class="field"><label>ملاحظات (اختياري)</label><input id="cNotes" placeholder="أي تفاصيل إضافية"></div>
+    <div id="orderSummary" style="background:rgba(255,193,7,.08);border-radius:12px;padding:12px;margin-bottom:14px;font-size:.9rem"></div>
+    <button class="btn btn-y" style="width:100%" onclick="confirmOrder()">🚀 تأكيد الطلب وإرسال واتساب</button>
+    <button class="btn btn-o" style="width:100%;margin-top:8px" onclick="closeModal('checkoutModal')">رجوع</button>
+  </div>
+</div>
+
+<!-- Admin login modal -->
+<div class="modal" id="loginModal">
+  <div class="modal-box" style="width:min(380px,100%)">
+    <h2>🔐 لوحة تحكم المدير</h2>
+    <div class="field"><label>كلمة السر</label><input id="adminPass" type="password" placeholder="••••"></div>
+    <button class="btn btn-y" style="width:100%" onclick="doLogin()">دخول</button>
+    <button class="btn btn-o" style="width:100%;margin-top:8px" onclick="closeModal('loginModal')">إلغاء</button>
+  </div>
+</div>
+
+<!-- Admin panel modal -->
+<div class="modal" id="adminModal">
+  <div class="modal-box" style="width:min(620px,100%)">
+    <h2>⚙️ إدارة المنتجات</h2>
+    <h3 style="color:var(--yellow2);margin-bottom:10px;font-size:1rem">➕ إضافة منتج جديد</h3>
+    <div class="field"><label>اسم المنتج *</label><input id="pName" placeholder="مثال: iPhone 13 Pro"></div>
+    <div class="two-col">
+      <div class="field"><label>السعر (ج.م) *</label><input id="pPrice" type="number" min="0" placeholder="25000"></div>
+      <div class="field"><label>القسم *</label><select id="pCat"></select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>إيموجي المنتج 🎨</label><input id="pEmoji" placeholder="📱" maxlength="4"></div>
+      <div class="field"><label>خصم % (اختياري)</label><input id="pDisc" type="number" min="0" max="90" placeholder="0"></div>
+    </div>
+    <div class="field"><label>رابط صورة (اختياري)</label><input id="pImg" placeholder="https://..."></div>
+    <div class="field"><label>أو ارفع صورة من جهازك 📸 (أقل من 1.5 ميجا)</label><input type="file" id="pFile" accept="image/*" onchange="previewImg(this)"><div id="imgPreview" style="margin-top:8px"></div></div>
+    <button class="btn btn-y" style="width:100%" onclick="addProduct()">💾 إضافة المنتج</button>
+    <h3 style="color:var(--yellow2);margin:18px 0 10px;font-size:1rem">📦 المنتجات الحالية</h3>
+    <div id="adminList"></div>
+    <button class="btn btn-o" style="width:100%;margin-top:12px" onclick="closeModal('adminModal')">إغلاق</button>
+  </div>
+</div>
+
+<!-- Edit product modal -->
+<div class="modal" id="editModal">
+  <div class="modal-box" style="width:min(420px,100%)">
+    <h2>✏️ تعديل منتج</h2>
+    <input type="hidden" id="eId">
+    <div class="field"><label>الاسم</label><input id="eName"></div>
+    <div class="field"><label>السعر (ج.م)</label><input id="ePrice" type="number" min="0"></div>
+    <div class="field"><label>إيموجي / رابط صورة</label><input id="eEmoji" placeholder="📱 أو https://..."></div>
+    <button class="btn btn-y" style="width:100%" onclick="saveEdit()">💾 حفظ التعديلات</button>
+    <button class="btn btn-o" style="width:100%;margin-top:8px" onclick="closeModal('editModal')">إلغاء</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>أبو العلا ستور 📱 صيانة - بيع - شراء - إكسسوارات | 📞 01068084025</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const WA_NUMBER = "20106808425"; // رقم الواتساب اللي بتيجي عليه الأوردرات
+const ADMIN_PASSWORD = "1234";   // كلمة سر لوحة التحكم - غيّرها من هنا
+const GOVS = ["القاهرة","الجيزة","الإسكندرية","الدقهلية","البحيرة","الغربية","المنوفية","الشرقية","القليوبية","كفر الشيخ","دمياط","بورسعيد","الإسماعيلية","السويس","أسيوط","أسوان","الأقصر","سوهاج","قنا","المنيا","بني سويف","الفيوم","مطروح","شمال سيناء","جنوب سيناء","البحر الأحمر","الوادي الجديد"];
+const CATS = ["هواتف","إكسسوارات","سماعات","شواحن","حالات مستعملة"];
+
+const DEFAULT_PRODUCTS = [
+ {id:1,name:"iPhone 14 Pro Max",price:45000,cat:"هواتف",emoji:"📱",disc:0},
+ {id:2,name:"Samsung S23 Ultra",price:38000,cat:"هواتف",emoji:"📱",disc:5},
+ {id:3,name:"Xiaomi Redmi Note 13",price:9500,cat:"هواتف",emoji:"📱",disc:0},
+ {id:4,name:"سماعة AirPods Pro",price:5200,cat:"سماعات",emoji:"🎧",disc:0},
+ {id:5,name:"شاحن سريع 65W",price:850,cat:"شواحن",emoji:"🔌",disc:10},
+ {id:6,name:"جراب كفر حماية",price:350,cat:"إكسسوارات",emoji:"🛡️",disc:0},
+ {id:7,name:"شاشة أصلية iPhone",price:6000,cat:"إكسسوارات",emoji:"🖥️",disc:0},
+ {id:8,name:"موبايل مستعمل ضمان شهر",price:5000,cat:"حالات مستعملة",emoji:"♻️",disc:0}
+];
+
+const SUPABASE_URL = "https://xodpycazbkitgoaxybyx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_HU99oCG4owByDiyhyCf3-w_kqDDYBRI";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let products = [];
+
+function fixImg(u){u=(u||"").trim();if(!u)return "";
+  const m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/);
+  if(m)return "https://drive.google.com/uc?export=view&id="+m[1];
+  return u;}
+
+let dbWarned=false;
+async function loadProducts(){
+  try{
+    let {data,error} = await sb.from("products").select("*").order("id",{ascending:true});
+    if(error) throw error;
+    if(!data||data.length===0){
+      const seed=DEFAULT_PRODUCTS.map(p=>({name:p.name,price:p.price,cat:p.cat,img:p.emoji,disc:p.disc}));
+      const ins=await sb.from("products").insert(seed);
+      if(ins.error) throw ins.error;
+      const r2=await sb.from("products").select("*").order("id",{ascending:true});
+      data=r2.data;
+    }
+    products=(data||[]).map(p=>({id:p.id,name:p.name,price:Number(p.price)||0,cat:p.cat||"هواتف",emoji:fixImg(p.img)||"📦",disc:p.disc||0}));
+  }catch(e){
+    console.log("load failed",e);
+    if(!dbWarned){dbWarned=true;toast("⚠️ اعمل جدول products في Supabase من SQL Editor");}
+  }
+  renderCats();renderGrid();
+  if(typeof renderAdmin==="function" && isAdmin) renderAdmin();
+}
+loadProducts();
+setInterval(loadProducts,300000);
+let cart = JSON.parse(localStorage.getItem("aela_cart")||"[]");
+let activeCat = "الكل";
+
+function saveProducts(){localStorage.setItem("aela_products",JSON.stringify(products))}
+function saveCart(){localStorage.setItem("aela_cart",JSON.stringify(cart))}
+const fmt = n => n.toLocaleString("ar-EG")+" ج.م";
+
+function renderCats(){
+  const cats=["الكل",...CATS];
+  document.getElementById("cats").innerHTML = cats.map(c=>
+    `<button class="cat-btn ${c===activeCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join("");
+}
+function setCat(c){activeCat=c;renderCats();renderGrid()}
+function renderGrid(){
+  const list = activeCat==="الكل"?products:products.filter(p=>p.cat===activeCat);
+  const grid=document.getElementById("grid");
+  if(!list.length){grid.innerHTML='<div class="empty">لا توجد منتجات هنا حالياً 🛒</div>';return}
+  grid.innerHTML=list.map(p=>{
+    const final=p.disc?Math.round(p.price*(1-p.disc/100)):p.price;
+    return `<div class="card">
+      ${p.disc?`<div class="badge">خصم ${p.disc}%</div>`:""}
+      <div class="img">${isImg(p.emoji)?`<img src="${p.emoji}">`:p.emoji}</div>
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <div class="price">${fmt(final)} ${p.disc?`<small style="text-decoration:line-through;color:rgba(255,255,255,.5)">${fmt(p.price)}</small>`:""}</div>
+        <button class="add-btn" onclick="addToCart(${p.id})">🛒 أضف للسلة</button>
+      </div></div>`;
+  }).join("");
+}
+const isImg = s => s && (s.startsWith("http")||s.startsWith("data:")||s.includes(".png")||s.includes(".jpg")||s.includes(".jpeg")||s.includes(".webp"));
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const final=p.disc?Math.round(p.price*(1-p.disc/100)):p.price;
+  const key=p.id+"|"+p.name;
+  const it=cart.find(i=>i.key===key);
+  if(it)it.qty++;else cart.push({key,id:p.id,name:p.name,price:final,emoji:p.emoji,qty:1});
+  saveCart();renderCart();toast("✅ اتضاف للسلة");
+}
+function changeQty(key,d){
+  const it=cart.find(i=>i.key===key);if(!it)return;
+  it.qty+=d;if(it.qty<=0)cart=cart.filter(i=>i.key!==key);
+  saveCart();renderCart();
+}
+function removeItem(key){cart=cart.filter(i=>i.key!==key);saveCart();renderCart()}
+function cartTotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0)}
+
+function renderCart(){
+  const box=document.getElementById("cartItems");
+  document.getElementById("cartCount").textContent=cart.reduce((s,i)=>s+i.qty,0);
+  cart=cart.filter(i=>i.key);
+  if(!cart.length){box.innerHTML='<div class="empty">السلة فاضية 😅<br>اختار منتجات من المتجر</div>';}
+  else box.innerHTML=cart.map(i=>`<div class="cart-item">
+      <div class="ci-img">${isImg(i.emoji)?"🖼️":(i.emoji||"📦")}</div>
+      <div class="ci-info"><b>${i.name}</b><br><span style="color:var(--yellow)">${fmt(i.price)}</span></div>
+      <div class="qty-btns"><button onclick="changeQty('${i.key}',1)">+</button><b>${i.qty}</b><button onclick="changeQty('${i.key}',-1)">−</button></div>
+      <button class="small-btn btn-d" onclick="removeItem('${i.key}')">🗑</button></div>`).join("");
+  document.getElementById("cartTotal").textContent=fmt(cartTotal());
+}
+
+function openCart(){document.getElementById("overlay").classList.add("show");document.getElementById("cartDrawer").classList.add("open")}
+function closeAll(){document.getElementById("overlay").classList.remove("show");document.getElementById("cartDrawer").classList.remove("open")}
+function closeModal(id){document.getElementById(id).classList.remove("show")}
+
+function openCheckout(){
+  if(!cart.length){toast("⚠️ السلة فاضية! ضيف منتجات الأول");return}
+  closeAll();
+  document.getElementById("orderSummary").innerHTML="<b>📦 ملخص الطلب:</b><br>"+
+    cart.map(i=>`• ${i.name} × ${i.qty} = ${fmt(i.price*i.qty)}`).join("<br>")+
+    `<br><b style="color:var(--yellow)">الإجمالي: ${fmt(cartTotal())}</b>`;
+  document.getElementById("checkoutModal").classList.add("show");
+}
+
+function confirmOrder(){
+  const name=document.getElementById("cName").value.trim();
+  const phone=document.getElementById("cPhone").value.trim();
+  const gov=document.getElementById("cGov").value;
+  const addr=document.getElementById("cAddr").value.trim();
+  const notes=document.getElementById("cNotes").value.trim();
+  if(!name)return toast("⚠️ اكتب اسمك");
+  if(!/^01[0-9]{9}$/.test(phone))return toast("⚠️ رقم الموبايل لازم يكون 11 رقم ويبدأ بـ 01");
+  if(!gov)return toast("⚠️ اختار المحافظة");
+  if(!addr)return toast("⚠️ اكتب العنوان بالتفصيل");
+  let msg=`🛒 *طلب جديد - أبو العلا ستور*\n━━━━━━━━━━\n`;
+  msg+=`👤 الاسم: ${name}\n📱 الموبايل: ${phone}\n🗺️ المحافظة: ${gov}\n📍 العنوان: ${addr}\n`;
+  if(notes)msg+=`📝 ملاحظات: ${notes}\n`;
+  msg+=`━━━━━━━━━━\n*المنتجات:*\n`;
+  cart.forEach((i,idx)=>{msg+=`${idx+1}. ${i.name} × ${i.qty} = ${i.price*i.qty} ج.م\n`});
+  msg+=`━━━━━━━━━━\n💰 *الإجمالي: ${cartTotal()} ج.م*\n⏰ وقت الطلب: ${new Date().toLocaleString("ar-EG")}`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,"_blank");
+  toast("📤 تم إرسال الطلب على واتساب!");
+  cart=[];saveCart();renderCart();closeModal("checkoutModal");
+}
+
+/* ====== Admin ====== */
+let isAdmin=false;
+function openAdmin(){document.getElementById(isAdmin?"adminModal":"loginModal").classList.add("show")}
+function doLogin(){
+  if(document.getElementById("adminPass").value===ADMIN_PASSWORD){
+    isAdmin=true;closeModal("loginModal");document.getElementById("adminPass").value="";
+    renderAdmin();document.getElementById("adminModal").classList.add("show");
+  } else toast("❌ كلمة السر غلط");
+}
+function renderAdmin(){
+  document.getElementById("adminList").innerHTML=products.map(p=>
+    `<div class="admin-item">
+      <span style="font-size:1.3rem">${isImg(p.emoji)?"🖼️":p.emoji}</span>
+      <span class="ai-name">${p.name}<br><small style="color:var(--yellow)">${fmt(p.price)} - ${p.cat}</small></span>
+      <button class="small-btn btn-y" onclick="openEdit(${p.id})">✏️ تعديل</button>
+      <button class="small-btn btn-d" onclick="delProduct(${p.id})">🗑</button>
+    </div>`).join("")||'<div class="empty">مفيش منتجات - ضيف أول منتج من الفورم اللي فوق</div>';
+}
+let uploadedImg="";
+function previewImg(inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>1.5*1024*1024){toast("⚠️ الصورة كبيرة، اختر صورة أقل من 1.5 ميجا");inp.value="";return}
+  const r=new FileReader();
+  r.onload=e=>{uploadedImg=e.target.result;document.getElementById("imgPreview").innerHTML=`<img src="${uploadedImg}" style="max-height:110px;border-radius:10px;border:2px solid var(--yellow)">`};
+  r.readAsDataURL(f);
+}
+async function addProduct(){
+  const name=document.getElementById("pName").value.trim();
+  const price=parseFloat(document.getElementById("pPrice").value);
+  const cat=document.getElementById("pCat").value;
+  const emoji=document.getElementById("pEmoji").value.trim()||"📦";
+  const disc=parseInt(document.getElementById("pDisc").value)||0;
+  const img=fixImg(document.getElementById("pImg").value);
+  if(!name||!price)return toast("⚠️ اكتب اسم المنتج والسعر");
+  const {error}=await sb.from("products").insert({name,price,cat,disc,img:uploadedImg||img||emoji});
+  if(error)return toast("❌ حصل خطأ: "+error.message);
+  uploadedImg="";document.getElementById("pFile").value="";document.getElementById("imgPreview").innerHTML="";
+  ["pName","pPrice","pEmoji","pDisc","pImg"].forEach(id=>document.getElementById(id).value="");
+  toast("✅ تمت إضافة المنتج - هتظهر للكل");
+  loadProducts();
+}
+async function delProduct(id){
+  if(!confirm("متأكد إنك عايز تمسح المنتج ده؟"))return;
+  const {error}=await sb.from("products").delete().eq("id",id);
+  if(error)return toast("❌ حصل خطأ: "+error.message);
+  toast("🗑 تم الحذف");loadProducts();
+}
+function openEdit(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  document.getElementById("eId").value=id;
+  document.getElementById("eName").value=p.name;
+  document.getElementById("ePrice").value=p.price;
+  document.getElementById("eEmoji").value=isImg(p.emoji)?"":p.emoji;
+  document.getElementById("editModal").classList.add("show");
+}
+async function saveEdit(){
+  const id=document.getElementById("eId").value;
+  const p=products.find(x=>x.id==id);
+  const name=document.getElementById("eName").value.trim()||p.name;
+  const price=parseFloat(document.getElementById("ePrice").value)||p.price;
+  const em=document.getElementById("eEmoji").value.trim();
+  const {error}=await sb.from("products").update({name,price,img:em||p.emoji}).eq("id",id);
+  if(error)return toast("❌ حصل خطأ: "+error.message);
+  closeModal("editModal");toast("💾 تم حفظ التعديلات");loadProducts();
+}
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.style.display="block";setTimeout(()=>el.style.display="none",2500)}
+
+// init
+document.getElementById("cGov").innerHTML='<option value="">اختر المحافظة</option>'+GOVS.map(g=>`<option>${g}</option>`).join("");
+document.getElementById("pCat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+renderCats();renderGrid();renderCart();
+</script>
+</body>
+</html>
