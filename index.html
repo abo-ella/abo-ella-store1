@@ -1,47 +1,91 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو العلاء ستور</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 50px;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            font-size: 18px;
-            color: #555;
-        }
-        .phone {
-            font-weight: bold;
-            color: #007bff;
-            font-size: 22px;
-            margin-top: 15px;
-            direction: ltr;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أبو العلا ستور | Abu Al-Ela Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0a1a3f; --blue2:#122a5e; --yellow:#ffc107; --yellow2:#ffde59;
+  --white:#fff; --danger:#e53935; --ok:#22c55e;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:linear-gradient(160deg,#0a1a3f,#122a5e 60%,#0a1a3f);color:#fff;min-height:100vh}
+header{position:sticky;top:0;z-index:50;background:rgba(10,26,63,.92);backdrop-filter:blur(10px);border-bottom:2px solid var(--yellow)}
+.header-in{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.4rem;color:var(--yellow)}
+.logo-badge{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--yellow),#ff9800);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 0 15px rgba(255,193,7,.5)}
+.hdr-btns{display:flex;gap:8px}
+.btn{cursor:pointer;border:none;border-radius:12px;padding:10px 16px;font-weight:700;font-size:.95rem;transition:.2s}
+.btn-y{background:linear-gradient(135deg,var(--yellow),#ff9800);color:#0a1a3f}
+.btn-y:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,193,7,.4)}
+.btn-o{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn-o:hover{background:rgba(255,255,255,.2)}
+.btn-d{background:var(--danger);color:#fff}
+.cart-count{background:var(--danger);color:#fff;border-radius:50%;padding:2px 8px;font-size:.8rem;margin-right:4px}
+.hero{max-width:1200px;margin:20px auto;padding:0 16px}
+.hero img{width:100%;border-radius:20px;border:2px solid var(--yellow);box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.cats{max-width:1200px;margin:20px auto;padding:0 16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.cat-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:30px;padding:8px 20px;cursor:pointer;font-weight:700;transition:.2s}
+.cat-btn.active,.cat-btn:hover{background:var(--yellow);color:#0a1a3f;border-color:var(--yellow)}
+.grid{max-width:1200px;margin:20px auto 60px;padding:0 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;transition:.25s;position:relative}
+.card:hover{transform:translateY(-6px);border-color:var(--yellow);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.card .img{height:170px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;background:radial-gradient(circle at 50% 40%,rgba(255,193,7,.18),transparent 70%)}
+.card .img img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:14px}
+.card-body h3{font-size:1.05rem;margin-bottom:6px}
+.price{color:var(--yellow);font-weight:900;font-size:1.25rem;margin-bottom:10px}
+.price small{font-size:.8rem;font-weight:400}
+.add-btn{width:100%;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#0a1a3f;border:none;border-radius:10px;padding:10px;font-weight:900;font-size:1rem;cursor:pointer;transition:.2s}
+.add-btn:hover{filter:brightness(1.1)}
+.badge{position:absolute;top:10px;right:10px;background:var(--danger);padding:3px 12px;border-radius:20px;font-size:.75rem;font-weight:700}
+/* cart drawer */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90;display:none}
+.overlay.show{display:block}
+.drawer{position:fixed;top:0;left:0;height:100%;width:min(420px,95vw);background:#0e2150;z-index:100;transform:translateX(-100%);transition:.3s;display:flex;flex-direction:column;border-right:2px solid var(--yellow)}
+.drawer.open{transform:translateX(0)}
+.drawer-h{padding:16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.15)}
+.drawer-items{flex:1;overflow-y:auto;padding:14px}
+.cart-item{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.07);border-radius:12px;padding:10px;margin-bottom:10px}
+.cart-item .ci-img{font-size:2rem;width:50px;text-align:center}
+.cart-item .ci-info{flex:1}
+.qty-btns{display:flex;gap:6px;align-items:center}
+.qty-btns button{width:28px;height:28px;border-radius:8px;border:none;background:var(--yellow);color:#0a1a3f;font-weight:900;cursor:pointer}
+.drawer-f{padding:16px;border-top:1px solid rgba(255,255,255,.15)}
+.total-row{display:flex;justify-content:space-between;font-weight:900;font-size:1.2rem;margin-bottom:12px;color:var(--yellow)}
+/* forms */
+.field{margin-bottom:12px}
+.field label{display:block;margin-bottom:5px;font-size:.9rem;font-weight:700;color:var(--yellow2)}
+.field input,.field select,.field textarea{width:100%;padding:11px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:.95rem}
+.field select option{color:#000}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--yellow)}
+/* modal */
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal-box{background:#0e2150;border:2px solid var(--yellow);border-radius:20px;width:min(520px,100%);max-height:90vh;overflow-y:auto;padding:24px}
+.modal-box h2{color:var(--yellow);margin-bottom:16px;font-size:1.3rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.admin-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.07);padding:10px 12px;border-radius:10px;margin-bottom:8px;gap:8px}
+.admin-item .ai-name{flex:1;font-size:.95rem}
+.small-btn{padding:6px 12px;font-size:.8rem;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+footer{text-align:center;padding:24px;color:rgba(255,255,255,.6);border-top:1px solid rgba(255,255,255,.1)}
+.toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ok);color:#fff;padding:12px 26px;border-radius:30px;font-weight:700;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.empty{text-align:center;padding:40px;color:rgba(255,255,255,.5);grid-column:1/-1}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}.logo{font-size:1.1rem}}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>مرحباً بكم في أبو العلاء ستور</h1>
-        <p>لتواصل والاستفسار، يرجى الاتصال بنا على الرقم التالي:</p>
-        <div class="phone">01068084025</div>
+<header>
+  <div class="header-in">
+    <div class="logo"><div class="logo-badge">📱</div><div>أبو العلا ستور<br><small style="font-size:.65rem;color:#fff;font-weight:400">Abu Al-Ela Store</small></div></div>
+    <div class="hdr-btns">
+      <button class="btn btn-o" onclick="openAdmin()">⚙️ لوحة التحكم</button>
+      <button class="btn btn-y" onclick="openCart()">🛒 السلة <span class="cart-count" id="cartCount">0</span></button>
     </div>
+  </div>
+</header>
 
-</body>
-</html>
+<div class="hero"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABCYAAAXKCAIAAACkOPklAABcZmNhQlgAAFxmanVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAXEBqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOjc3MWE3OTcyLTI4ODQtNGI1My05Y2M3LWY0OGMzNDE5YTdhNQAAAAx8anVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAJ0Wp1bWIAAAA7anVtZEDLDDK7ikidpwsq1vR/Q2kTYzJwYS5pY29uAAAAABhjMnNoHQP8+9rjhRM4Tbj2YoUjbwAAABdiZmRiAGltYWdlL3N2Zyt4bWwAAAAJd2JpZGI8c3ZnIHdpZHRoPSI3MTYiIGhlaWdodD0iNzE2IiB2aWV3Qm94PSIwIDAgNzE2IDcxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUwOC43NDkgMzE3LjM5OUM1MTYuNzc3IDI4Ny4zMTQgNTA4Ljk5MSAyNTMuODg0IDQ4NS4zODkgMjMwLjI4MkM0NjEuNzg4IDIwNi42ODEgNDI4LjM2IDE5OC44OTUgMzk4LjI3MyAyMDYuOTI3QzM3Ni4yMzEgMTg0LjkyOCAzNDMuMzkgMTc0Ljk1NiAzMTEuMTQ4IDE4Mzg1OTZDMjc4LjkwNiAxOTIuMjM0IDI1NS40NSAyMTcyOTIgMjQ3LjM2IDI0Ny4zNjFDMjE3LjI5MSAyNTUuNDUxIDE5Mi4yMzMgMjc4LjkxIDE4My41OTUgMzExLjE0OUMxNzQuOTU3IDM0My4zOTEgMTg0LjkyNyAzNzYuMjMyIDIwNi45MjQgMzk4LjI3NEMxOT44OTYgNDI4LjM1OSAyMDYuODgzIDQ2MS43ODkgMjMwLjI4NCA0ODUuMzkxQzI1My44ODUgNTA4Ljk5MiAyODcuMzEzIDUxNi43NzOSAzMTcuNDAxIDUwOC43NUMzMzkuNDQyIDUzMC43NDUgMzcyLjI4NiA1NDAuNzE3IDQwNC41MjUgNTMyLjA3OUM0MzY3NjcgNTIzLjQ0MSA0NjAuMjIzIDQ5OC4zODQgNDY4LjMxNSA0NjguMzE1QzQ5OC4zODMgNDYwLjIyNCA1MjMuNDQgNDM2Ljc2NiA1MzIuMDc4IDQwNC41MjZDNTQwLjcxNiAzNzIuMjg1IDUzMC43NDcgMzM5LjQ0MyA1MDguNzQ5IDMxNy40MDJWMzE3LjM5OVpNNDcwLjg5OSAyNDQuNzc2QzQ4Ni44OTIgMjYwLjc3IDQ5My40ODggMjgyLjYwMSA0OTAuNjg3IDMwMy40MTJMNDE1LjU3NyAyNjAuMDQ2QzQxMi40MTEgMjU4LjIxOCDQMDguNTA5IDI1OC4yMTggNDA1LjM0NSAyNjAuMDQ2TDMxNy40MDEgMzEwLjgyVjI3Ny41MjZDMzE3LjQwMSAyNzUuMTkxIDMxOC42NTIgMjczLjAwNSAzMjAuNjc2IDI3MS44MzdMMzg3LjY0NCAyMzMuMTc0QzQxNC4xNzggMjE4LjM1MyA0NDguMzQ2IDIyMi4yMjMgNDcwLjkwMSAyNDQuNzc2SDQ3MC44OTlaTTM1Ny44Mzc0MzExLjE0NEwzOTguMjc1IDMzNC40OTFWMzgxLjE4NUwzNTcuODM3IDQwNC41MzJMMzE3LjM5OCAzODEuMTg1VjMzNC40OTFMMzU3LjgzNyAzMTEuMTQ0Wk0yNjQuNzc2IDI2OS42OTNDMjY1LjIwNyAyMzkuMzA1IDI4NS42NDQgMjExLjY0OSAzMTYuNDUzIDIwMy4zOTNDMzM4LjMgMTk3LjU0IDM2MC41MDUgMjAyLjc0NCAzNzcuMTI3IDIxNS41NzNMMDAyLjAxNCAyNTguOTM
